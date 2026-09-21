@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class C/26 — Informatics Engineering</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── INTRO SCREEN ── -->
+  <div id="introScreen">
+    <div class="intro-panel intro-panel-left"></div>
+    <div class="intro-panel intro-panel-right"></div>
+    <div id="introLoader">
+      <div class="intro-dot"></div>
+      <div class="intro-dot"></div>
+      <div class="intro-dot"></div>
+      <div id="introLoadStatus"></div>
+    </div>
+    <div id="introQuestion">
+      <p class="intro-eyebrow">Informatics Engineering · Class C · 2026</p>
+      <h2 class="intro-heading">Wanna see<br><em>our class?</em></h2>
+      <button id="introBtn">
+        <span>Let's go</span>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <div id="introWelcome">Welcome</div>
+  </div>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="nav-brand">
+      <div class="nav-logo">C</div>
+      <div>
+        <div class="nav-title">Informatics Engineering</div>
+        <div class="nav-sub">Class C · 2026 · Mataram University</div>
+      </div>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#home" onclick="closeMenu()">Home</a>
+      <a href="#people" onclick="closeMenu()">About</a>
+      <a href="#works" onclick="closeMenu()">Resources</a>
+      <a href="#org" onclick="closeMenu()">Contact</a>
+      <button class="nav-search" aria-label="Search">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+          <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Hamburger for mobile -->
+    <button class="nav-hamburger" id="navHamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="home">
+    <div class="hero-photo-bg"></div>
+    <div class="hero-bg-tr"></div>
+    <div class="hero-bg-bl"></div>
+    <div class="hero-eyebrow anim">Informatics Engineering · 2026</div>
+    <h1 class="hero-title anim">
+      Class <em>C</em> / 26
+    </h1>
+    <p class="hero-subtitle anim">
+      Mitiline in a neete aotent and coo-existion montor in Informatics Engineering. We build, we learn, we ship.
+    </p>
+    <div class="hero-actions anim">
+      <button class="btn btn-primary" onclick="smoothScrollTo('#people')">Meet the Class</button>
+      <button class="btn btn-ghost" onclick="smoothScrollTo('#works')">View Projects →</button>
+    </div>
+    <div class="hero-stats anim">
+      <div class="stat-item">
+        <span class="stat-num">39</span>
+        <span class="stat-label">Members</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">2026</span>
+        <span class="stat-label">Batch</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">01</span>
+        <span class="stat-label">Semester</span>
+      </div>
+    </div>
+    <div class="hero-pagination anim">
+      <div class="page-dot active" data-page="0">1</div>
+      <div class="page-dot" data-page="1">2</div>
+      <div class="page-dot" data-page="2">3</div>
+    </div>
+  </section>
+
+  <!-- ── PEOPLE DIRECTORY ── -->
+  <section id="people">
+    <div class="section-label reveal">People Directory</div>
+    <div class="section-intro reveal">
+      <h2>The Class</h2>
+      <p>39 members spanning software, AI, and robotics tracks. Click any member to see their profile.</p>
+    </div>
+
+    <!-- Stats mini-bar -->
+    <div class="people-stats reveal">
+      <div class="people-stat">
+        <span class="people-stat-num">39</span>
+        <span class="people-stat-label">Members</span>
+      </div>
+      <div class="people-stat-div"></div>
+      <div class="people-stat">
+        <span class="people-stat-num">6</span>
+        <span class="people-stat-label">Tracks</span>
+      </div>
+      <div class="people-stat-div"></div>
+      <div class="people-stat">
+        <span class="people-stat-num">3</span>
+        <span class="people-stat-label">Divisions</span>
+      </div>
+      <div class="people-stat-div"></div>
+      <div class="people-stat">
+        <span class="people-stat-num">2026</span>
+        <span class="people-stat-label">Batch</span>
+      </div>
+    </div>
+
+    <!-- Marquee ticker -->
+    <div class="people-marquee reveal" aria-hidden="true">
+      <div class="marquee-track" id="marqueeTrack">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- Filter pills -->
+    <div class="people-filters reveal" id="peopleFilters">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="Software">Software</button>
+      <button class="filter-pill" data-filter="AI">AI</button>
+      <button class="filter-pill" data-filter="Robotics">Robotics</button>
+      <button class="filter-pill" data-filter="Data">Data</button>
+      <button class="filter-pill" data-filter="Security">Security</button>
+      <button class="filter-pill" data-filter="UI/UX">UI / UX</button>
+      <button class="filter-pill" data-filter="DevOps">DevOps</button>
+      <button class="filter-pill" data-filter="Mobile">Mobile</button>
+    </div>
+
+    <div class="avatar-grid" id="avatarGrid">
+      <!-- Injected by JS -->
+    </div>
+  </section>
+
+  <!-- ── WORKS / PORTFOLIO ── -->
+  <section id="works">
+    <canvas id="cometCanvas"></canvas>
+    <div class="section-label reveal">Works / Portfolio</div>
+    <div class="section-intro reveal">
+      <h2>Selected Projects</h2>
+      <p>Where the builds will live — research papers, engineering prototypes, and collaborative work.</p>
+    </div>
+
+    <div class="works-empty reveal">
+      <!-- Semester progress -->
+      <div class="sem-track">
+        <div class="sem-item active">
+          <div class="sem-dot active"></div>
+          <span>Sem 1</span>
+        </div>
+        <div class="sem-line"></div>
+        <div class="sem-item">
+          <div class="sem-dot"></div>
+          <span>Sem 2</span>
+        </div>
+        <div class="sem-line"></div>
+        <div class="sem-item">
+          <div class="sem-dot"></div>
+          <span>Sem 3</span>
+        </div>
+        <div class="sem-line sem-line-fade"></div>
+        <div class="sem-item muted">
+          <div class="sem-dot muted"></div>
+          <span>· · ·</span>
+        </div>
+        <div class="sem-line sem-line-fade"></div>
+        <div class="sem-item muted">
+          <div class="sem-dot muted"></div>
+          <span>Sem 8</span>
+        </div>
+      </div>
+
+      <!-- Ghost cards -->
+      <div class="works-ghost-grid">
+        <div class="ghost-card">
+          <div class="ghost-bar w60"></div>
+          <div class="ghost-bar w40 short"></div>
+          <div class="ghost-bar w80 shorter"></div>
+          <div class="ghost-bar w50 shorter"></div>
+        </div>
+        <div class="ghost-card ghost-card-mid">
+          <div class="ghost-bar w50"></div>
+          <div class="ghost-bar w70 short"></div>
+          <div class="ghost-bar w60 shorter"></div>
+          <div class="ghost-bar w40 shorter"></div>
+        </div>
+        <div class="ghost-card">
+          <div class="ghost-bar w70"></div>
+          <div class="ghost-bar w45 short"></div>
+          <div class="ghost-bar w55 shorter"></div>
+          <div class="ghost-bar w65 shorter"></div>
+        </div>
+      </div>
+
+      <div class="works-empty-msg">
+        <span class="works-empty-icon">✦</span>
+        <p class="works-empty-text">We're only in Semester 1 — but we're already building.</p>
+        <p class="works-empty-sub">Projects will appear here as the semesters go on.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COMMUNITY HUB ── -->
+  <section id="org">
+    <div class="section-label reveal">Community Hub</div>
+    <div class="section-intro reveal">
+      <h2>The Network</h2>
+      <p>39 anggota, satu kelas — semua terhubung. Hover untuk nama, klik untuk profil.</p>
+    </div>
+    <div class="hub-wrap reveal">
+      <canvas id="hubCanvas"></canvas>
+    </div>
+  </section>
+
+  <!-- ── GALLERY ── -->
+  <section id="gallery">
+    <canvas id="plexusCanvas"></canvas>
+    <div class="section-label reveal">Moments / Gallery</div>
+    <div class="section-intro reveal">
+      <h2>Class Moments</h2>
+      <p>Foto-foto kebersamaan kelas C/26.</p>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Injected by JS -->
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="foot-brand">Class C / 26 — Informatics Engineering</div>
+    <div class="foot-copy">© 2026 · Built by the class, for the class</div>
+  </footer>
+
+  <!-- ── FLY BALL (morphing circle, direct child of body) ── -->
+  <div id="flyBall"></div>
+
+  <!-- ── MEMBER CARD (outside all sections, direct child of body) ── -->
+  <div class="member-card" id="memberCard">
+    <div class="mc-content">
+      <div class="mc-photo" id="mcPhoto">
+        <div class="mc-avatar-ring">
+          <span id="mcInitial">G</span>
+        </div>
+        <div class="mc-header-info">
+          <div class="mc-name" id="mcName">Name</div>
+          <div class="mc-num" id="mcNum">#01</div>
+        </div>
+        <button class="mc-close" id="mcClose" aria-label="Close">×</button>
+      </div>
+      <div class="mc-body">
+        <div class="mc-section">
+          <div class="mc-label">Hobby</div>
+          <div class="mc-value" id="mcHobby">—</div>
+        </div>
+        <div class="mc-section">
+          <div class="mc-label">Skill</div>
+          <div class="mc-tags" id="mcSkills"></div>
+        </div>
+        <div class="mc-section">
+          <div class="mc-label">Ket</div>
+          <div class="mc-value mc-ket" id="mcKet">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

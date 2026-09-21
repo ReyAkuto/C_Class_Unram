@@ -1,0 +1,219 @@
+PROJECT: Class C/26 Informatics Engineering Website
+Last updated: Session 2
+
+Stack: Pure HTML + CSS + Vanilla JS (3 file terpisah: index.html, style.css, main.js)
+
+─────────────────────────────────────────
+DESIGN SYSTEM
+─────────────────────────────────────────
+Background: #0D1117, Surface: #161B22, #1C2128, #252D38
+Accent: #58A6FF, Accent dim: rgba(88,166,255,0.12)
+Text: #E6EDF3 (primary), #8B949E (secondary), #484F58 (muted)
+Font: Instrument Serif (display/italic) + Inter (body)
+
+─────────────────────────────────────────
+STRUKTUR FILE
+─────────────────────────────────────────
+index.html
+style.css
+main.js
+content/
+  music/music.mp3         ← background music
+  bg/FotoKelasC.jpeg      ← hero photo background
+  moments/m1.jpeg … m4.jpeg  ← gallery photos (max 4, onerror auto-hide)
+
+─────────────────────────────────────────
+SECTIONS (Nav → Hero → People → Works → Org+Gallery → Footer)
+─────────────────────────────────────────
+
+NAV:
+- Sticky, frosted glass, height 56px
+- Desktop: logo + nav links + search icon
+- Mobile (≤768px): logo + hamburger button (☰ → ✕ animasi)
+- Hamburger logic: toggleMenu() / closeMenu() di main.js
+- navLinks#id, navHamburger#id
+
+HERO:
+- Full-bleed photo bg (content/bg/FotoKelasC.jpeg), opacity 0.13, blur+grayscale
+- Entrance animation system: body.hero-loaded trigger semua .anim elements
+- 6 keyframes: heroEyebrow, heroTitleReveal, heroSubtitle, heroActions, heroStats, heroPagination
+- Hero shimmer: ::after diagonal sweep pada .hero-title
+- PENTING: hero-loaded WAJIB di-trigger SEBELUM intro overlay split — bukan setelahnya
+  (kalau dibalik → kedip/flicker saat transisi)
+
+INTRO SCREEN (#introScreen):
+- Full-screen overlay, direct child of <body>, z-index 9999
+- Dua panel split: .intro-panel-left + .intro-panel-right
+- Sequence: loading dots → "Wanna see our class?" + tombol → fade "Welcome" → panel split kiri-kanan
+- hero-loaded di-fire SEBELUM screen.classList.add("exit")
+- screen.remove() dipanggil 950ms setelah exit (setelah animasi selesai)
+- Background music: window._bgMusic = new Audio('content/music/music.mp3')
+  → WAJIB pakai window._bgMusic (bukan HTML element) agar tidak ikut ke-remove() bersama DOM
+  → startMusic() dipanggil saat tombol "Let's go" diklik: seekTo second 17, loop manual via 'ended' event
+
+PEOPLE DIRECTORY (#people):
+- 39 avatar circle (72px, Instrument Serif italic), grid auto-fill minmax(80px)
+- Marquee ticker: scrolling nama+track, velocity-based, triple-duplicate loop
+- Filter pills: 8 track filters, dimmed class untuk non-match
+- Floating member card: position fixed, direct child of <body> — BUKAN di dalam section
+- Card positioning: positionCardByAvatar(idx) pakai getBoundingClientRect()
+  → flip kiri/kanan otomatis, clamp y min 64px (navbar), clamp bottom viewport
+  → Mobile (≤768px): card jadi bottom sheet, CSS override position (isMobile() check di JS)
+- Tutup card: removeEventListener + 200ms delay sebelum attach baru (fix bug re-open)
+- Cursor glow: blob biru, lerp 0.28, aktif hanya di #people, z-index 0
+
+WORKS/PORTFOLIO (#works):
+- Masih semester 1 → konten placeholder (ghost cards + semester progress bar)
+- Comet canvas (#cometCanvas): absolute background, z-index 0
+  → MAX_COMETS 7, SPAWN_RATE 0.018, sudut 35° miring kanan
+  → Trail gradient + radial head glow, warna biru putih dingin
+  → Seed 4 komet saat load dengan stagger 300ms
+  → Semua child #works pakai z-index: 2 agar di atas canvas
+
+ORG CHART + GALLERY (#org):
+- Layout two-col (grid), jadi satu kolom di mobile
+- Plexus canvas (#plexusCanvas): particle network background, absolute, z-index 0
+  → 48 partikel, speed 0.35, connect distance 130px
+  → Warna putih (255,255,255), line opacity max 0.12
+  → Titik: spotlight kecil — bright core (radius 0.5x) + radial glow (radius 3x), opacity 0.7
+  → Bounce di edges
+- Gallery: renderGallery() inject foto dari content/moments/m1–m4.jpeg
+  → onerror → item.style.display = 'none' (auto-hide kalau file tidak ada)
+  → Layout grid: g-tall (kiri tall), g-sm (kanan atas), g-sm (kanan tengah), g-wide (bawah full)
+  → Hover 300ms delay → item.classList.add('expanded') → scale(1.18), z-index 10
+  → Siblings di-dim opacity 0.45 via :has() selector
+  → Click → lightbox (#galleryLightbox): backdrop blur, scale from 0.93, close via backdrop/✕/Escape
+
+FOOTER:
+- Simple, center-aligned di mobile
+
+─────────────────────────────────────────
+RESPONSIVE BREAKPOINTS
+─────────────────────────────────────────
+>900px  : Desktop normal
+≤900px  : Tablet — padding 24px, two-col jadi 1 col
+≤768px  : Mobile — hamburger nav, hero stack, avatar 60px, member card bottom sheet
+≤380px  : Small phone — ukuran lebih kecil lagi
+
+─────────────────────────────────────────
+BUG PENTING YANG SUDAH DI-FIX (JANGAN DIULANGI)
+─────────────────────────────────────────
+1. Semua elemen dekoratif hero WAJIB position: absolute bukan fixed
+   (.hero::before/after, .hero-bg-tr/bl, .hero-stats, .hero-pagination, .mc-photo::before)
+2. #memberCard WAJIB direct child of <body>, bukan di dalam section flex
+3. Click listener tutup card: selalu removeEventListener dulu, delay 200ms sebelum attach baru
+4. Audio music WAJIB pakai window._bgMusic = new Audio(...) — BUKAN <audio> HTML tag di dalam
+   #introScreen, karena screen.remove() akan ikut hapus element HTML di dalamnya
+5. hero-loaded class WAJIB di-trigger sebelum intro panel split (.exit) — bukan setelah —
+   kalau dibalik akan menyebabkan flicker/kedip saat transisi
+6. #cometCanvas dan #plexusCanvas: semua sibling content wajib z-index ≥ 2,
+   canvas z-index 0, section pakai isolation: isolate + position: relative
+7. scrollbar-width: none + html::-webkit-scrollbar { display: none } untuk hide scrollbar
+
+─────────────────────────────────────────
+STATUS SAAT INI
+─────────────────────────────────────────
+✅ Intro screen (loading → question → welcome → split reveal)
+✅ Background music dari detik ke-17, loop manual, persist setelah intro
+✅ Hero entrance animation (staggered cascade)
+✅ People directory (avatar grid, filter, marquee, floating card)
+✅ Comet animation di Works section
+✅ Plexus particle network di Org+Gallery section
+✅ Gallery moments (real photos, expand-on-hover, lightbox-on-click)
+✅ Hamburger nav untuk mobile
+✅ Responsive (desktop/tablet/mobile/small phone)
+✅ Scrollbar hidden
+✅ File structure: content/music/, content/bg/, content/moments/
+
+🔲 Foto asli member (masih pakai initial/huruf)
+🔲 Konten works/portfolio (masih placeholder — menunggu semester berikutnya)
+🔲 Org chart nama jabatan masih hardcoded (belum diisi nama asli)
+🔲 Works section: perlu diisi ketika ada project nyata
+Summary
+Class C/26 Informatics Engineering website project — stack, sections, bugs, status
+
+Details
+Project: Class C/26 Informatics Engineering Website
+Stack: Pure HTML + CSS + Vanilla JS (3 file terpisah: index.html, style.css, main.js)
+Last session: Session 3
+Design System
+Background: 
+#0D1117, Surface: 
+#161B22, 
+#1C2128, 
+#252D38
+Accent: 
+#58A6FF, Accent dim: rgba(88,166,255,0.12)
+Text: 
+#E6EDF3 (primary), 
+#8B949E (secondary), 
+#484F58 (muted)
+Font: Instrument Serif (display/italic) + Inter (body)
+File Structure
+index.html, style.css, main.js
+content/music/music.mp3 — background music
+content/bg/FotoKelasC.jpeg — hero photo background
+content/moments/m1.jpeg … m4.jpeg — gallery photos (max 4, onerror auto-hide)
+Sections (urutan)
+Nav → Hero → People → Works → Community Hub (#org) → Gallery (#gallery) → Footer
+Community Hub (#org) — UPDATED Session 3
+Menggantikan Org Chart lama
+Canvas interaktif (#hubCanvas) full-width, centered, 680px (min(680px, 92vw))
+4 cincin orbit: Ring1=6 member, Ring2=9, Ring3=12, Ring4=12 → total 39 semua masuk
+Sudut evenly spaced matematis per ring, no jitter, no tabrakan
+Ring alternating direction: ring 1&3 clockwise, ring 2&4 counter-clockwise
+No inisial di node — pakai center dot + nama muncul saat hover (outward)
+DPR/retina scaling (devicePixelRatio, max 2) — crisp di semua layar
+Node punya idle shimmer breathing via Math.sin(pulse)
+Hover: glow lerp smooth (ease-in cepat, ease-out lambat), label fade in dengan shadowBlur
+Click node → buka floating member card (sama seperti People Directory)
+Sun (center circle) radius = S * 0.148 — dominan di tengah
+Ring fracs: 0.380 / 0.530 / 0.685 / 0.860 — spacing lega dari sun ke ring 1
+Ring speeds: 0.000055 / -0.000038 / 0.000028 / -0.000020
+Multi-layer radial glow di sun (3 lapis), gradient fill, inner ring accent
+Ambient deep glow di background center
+Plexus background DIPINDAH ke #gallery section (bukan #org lagi)
+Gallery (#gallery) — UPDATED Session 3
+Section terpisah di bawah Community Hub
+Plexus particle network background (#plexusCanvas) ada di sini
+initPlexus() reference section #gallery
+Org section (#org)
+Tidak ada plexus background lagi — bersih
+Hanya Community Hub canvas
+People Directory (#people)
+39 avatar circle (72px, Instrument Serif italic), grid auto-fill minmax(80px)
+Marquee ticker velocity-based, triple-duplicate, lerp 0.045
+Filter pills: 8 track filters
+Floating member card: position fixed, direct child of body
+Card data: name, #num · nim, hobby, skills tags, ket
+Cursor glow lerp 0.28 aktif hanya di #people
+Nav
+Sticky frosted glass, height 56px
+Mobile ≤768px: hamburger (toggleMenu/closeMenu)
+Hero
+Full-bleed photo bg opacity 0.13, blur+grayscale
+6 keyframes staggered entrance animation
+hero-loaded WAJIB di-trigger SEBELUM intro overlay split
+Intro Screen
+Full-screen overlay z-index 9999, dua panel split kiri-kanan
+window._bgMusic = new Audio(...) — BUKAN HTML tag (ikut ke-remove kalau HTML)
+startMusic() seekTo second 17, loop manual via 'ended' event
+Works (#works)
+Comet canvas (#cometCanvas) background z-index 0
+Masih placeholder — menunggu project nyata semester berikutnya
+Bugs Penting (jangan diulangi)
+Semua elemen dekoratif hero WAJIB position: absolute bukan fixed
+#memberCard WAJIB direct child of body
+Click listener tutup card: removeEventListener dulu, delay 200ms
+Audio WAJIB window._bgMusic bukan HTML tag di introScreen
+hero-loaded WAJIB sebelum intro split — kalau dibalik = flicker
+Canvas siblings WAJIB z-index ≥ 2, canvas z-index 0, section isolation: isolate
+scrollbar-width: none + html::-webkit-scrollbar { display: none }
+Status
+✅ Intro screen, music, hero animation, people directory, comet, plexus, gallery, hamburger, responsive, scrollbar hidden
+✅ Community Hub — 4 ring, 39 member, DPR scaling, smooth hover, premium visual
+✅ Plexus dipindah ke Gallery section
+🔲 Foto asli member (masih pakai initial/huruf di People Directory)
+🔲 Konten works/portfolio (placeholder)
+🔲 Nama jabatan org chart (hardcoded — tapi org chart sudah diganti Community Hub)
+
