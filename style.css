@@ -41,6 +41,7 @@ body {
   font-size: 14px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  padding-top: 56px;
 }
 
 h1, h2, h3, h4 {
@@ -243,8 +244,10 @@ a {
 
 /* ── NAV ── */
 nav {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   display: flex;
   align-items: center;
@@ -1720,6 +1723,8 @@ body.hero-loaded .hero-title.anim::after {
 @media (max-width: 768px) {
   /* Nav */
   nav { padding: 0 16px; height: 52px; }
+
+  body { padding-top: 52px; }
 
   .nav-sub { display: none; }
 
