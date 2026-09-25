@@ -5,7 +5,7 @@
 
 /* ── DATA — 39 members ── */
 const people = [
-  { num:"01", nim:"F1D02610002", name:"Albuhiadiyasa Putra",             initial:"AP", hobby:"Futsal", skills:["Software", "UI/UX"],  ket:"Ketua Kelas" },
+  { num:"01", nim:"F1D02610002", name:"Albuhiadiyasa Putra",             initial:"AP", hobby:"Cari Cwe", skills:["Software", "UI/UX"],  ket:"Ketua Kelas" },
   { num:"02", nim:"F1D02610005", name:"Casuarina Raudhatul Oktaviani",   initial:"CR", hobby:"Futsal", skills:["Data", "AI"],  ket:"Wakil Ketua" },
   { num:"03", nim:"F1D02610008", name:"Desak Putu Saras Puspita Dewi",   initial:"DS", hobby:"Nonton Anime", skills:["AI", "UI/UX"],  ket:"Sekretaris" },
   { num:"04", nim:"F1D02610012", name:"Ghina Ramawardani",               initial:"GR", hobby:"Dengerin Musik", skills:["DevOps", "Software"],  ket:"Bendahara" },
